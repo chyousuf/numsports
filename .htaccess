@@ -1,0 +1,201 @@
+# BEGIN WpFastestCache
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://www.mumsports.com/$1 [L,R=301] 
+
+RewriteCond %{HTTP_HOST} !^www\.
+RewriteRule ^(.*)$ https://www.mumsports.com/$1 [L,R=301]
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTPS} =on
+RewriteCond %{HTTP_HOST} ^www.mumsports.com
+
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule !.*\.php$ %{REQUEST_FILENAME}.php [QSA,L]
+
+#RewriteEngine on
+RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
+RewriteRule ^ /%1 [NC,L,R]
+
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^ %{REQUEST_URI}.php [NC,L]
+
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1 [NC,L,R]
+
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^ %{REQUEST_URI}.html [NC,L]
+
+# Start WPFC Exclude
+# End WPFC Exclude
+# Start_WPFC_Exclude_Admin_Cookie
+RewriteCond %{HTTP:Cookie} !wordpress_logged_in_[^\=]+\=mum_admin
+# End_WPFC_Exclude_Admin_Cookie
+RewriteCond %{HTTP_HOST} ^www.mumsports.com
+RewriteCond %{HTTP_USER_AGENT} !(facebookexternalhit|WP_FASTEST_CACHE_CSS_VALIDATOR|Twitterbot|LinkedInBot|WhatsApp|Mediatoolkitbot)
+RewriteCond %{HTTP_USER_AGENT} !(WP\sFastest\sCache\sPreload(\siPhone\sMobile)?\s*Bot)
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !(\/){2}$
+RewriteCond %{REQUEST_URI} \/$
+RewriteCond %{QUERY_STRING} !.+
+RewriteCond %{HTTP:Cookie} !comment_author_
+RewriteCond %{HTTP:Cookie} !safirmobilswitcher=mobil
+RewriteCond %{HTTP:Profile} !^[a-z0-9\"]+ [NC]
+RewriteCond %{DOCUMENT_ROOT}/wp-content/cache/all/$1/index.html -f [or]
+RewriteCond /home/mums3469/public_html/wp-content/cache/all/$1/index.html -f
+RewriteRule ^(.*) "/wp-content/cache/all/$1/index.html" [L]
+</IfModule>
+<FilesMatch "index\.(html|htm)$">
+AddDefaultCharset UTF-8
+<ifModule mod_headers.c>
+FileETag None
+Header unset ETag
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
+Header set Expires "Mon, 29 Oct 1923 20:30:00 GMT"
+</ifModule>
+</FilesMatch>
+# END WpFastestCache
+# BEGIN GzipWpFastestCache
+<IfModule mod_deflate.c>
+AddType x-font/woff .woff
+AddType x-font/ttf .ttf
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/x-font-ttf
+AddOutputFilterByType DEFLATE x-font/ttf
+AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+AddOutputFilterByType DEFLATE font/opentype font/ttf font/eot font/otf
+</IfModule>
+# END GzipWpFastestCache
+# BEGIN LBCWpFastestCache
+<FilesMatch "\.(webm|ogg|mp4|ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|x-html|css|xml|js|woff|woff2|otf|ttf|svg|eot)(\.gz)?$">
+<IfModule mod_expires.c>
+AddType application/font-woff2 .woff2
+AddType application/x-font-opentype .otf
+ExpiresActive On
+ExpiresDefault A0
+ExpiresByType video/webm A10368000
+ExpiresByType video/ogg A10368000
+ExpiresByType video/mp4 A10368000
+ExpiresByType image/webp A10368000
+ExpiresByType image/gif A10368000
+ExpiresByType image/png A10368000
+ExpiresByType image/jpg A10368000
+ExpiresByType image/jpeg A10368000
+ExpiresByType image/ico A10368000
+ExpiresByType image/svg+xml A10368000
+ExpiresByType text/css A10368000
+ExpiresByType text/javascript A10368000
+ExpiresByType application/javascript A10368000
+ExpiresByType application/x-javascript A10368000
+ExpiresByType application/font-woff2 A10368000
+ExpiresByType application/x-font-opentype A10368000
+ExpiresByType application/x-font-truetype A10368000
+</IfModule>
+<IfModule mod_headers.c>
+Header set Expires "max-age=A10368000, public"
+Header unset ETag
+Header set Connection keep-alive
+FileETag None
+</IfModule>
+</FilesMatch>
+# END LBCWpFastestCache
+
+
+
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+
+## BEGIN EXPIRES CACHING - JCH OPTIMIZE ##
+<IfModule mod_expires.c>
+  ExpiresActive on
+
+# Perhaps better to whitelist expires rules? Perhaps.
+  ExpiresDefault "access plus 1 month"
+
+# cache.appcache needs re-requests in FF 3.6 (thanks Remy ~Introducing HTML5)
+  ExpiresByType text/cache-manifest "access plus 0 seconds"
+
+# Your document html
+  ExpiresByType text/html "access plus 0 seconds"
+
+# Data
+  ExpiresByType text/xml "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+
+# Feed
+  ExpiresByType application/rss+xml "access plus 1 hour"
+  ExpiresByType application/atom+xml "access plus 1 hour"
+
+# Favicon (cannot be renamed)
+  ExpiresByType image/x-icon "access plus 1 week"
+
+# Media: images, video, audio
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpg "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType video/ogg "access plus 1 month"
+  ExpiresByType audio/ogg "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType video/webm "access plus 1 month"
+
+# HTC files (css3pie)
+  ExpiresByType text/x-component "access plus 1 month"
+
+# Webfonts
+  ExpiresByType application/x-font-ttf "access plus 1 month"
+  ExpiresByType font/opentype "access plus 1 month"
+  ExpiresByType application/x-font-woff "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+
+# CSS and JavaScript
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+
+  <IfModule mod_headers.c>
+    Header append Cache-Control "public"
+  </IfModule>
+
+</IfModule>
+## END EXPIRES CACHING - JCH OPTIMIZE ##
+
+Redirect 301 /paint-protection-film/ https://www.mumsports.com/paint-protection-film.php
+Redirect 301 /ceramicpro-inner/ https://www.mumsports.com/ceramicpro-inner.php
+Redirect 301 /auto-detailing/ https://www.mumsports.com/auto-detailing.php
+Redirect 301 /powder-coating-wheels/ https://www.mumsports.com/powder-coating-wheels.php
+Redirect 301 /window-tinting/ https://www.mumsports.com/window-tinting.php
+Redirect 301 /calipers-paint/ https://www.mumsports.com/calipers-paint.php
+Redirect 301 /chrome-delete-protection/ https://www.mumsports.com/chrome-delete-protection.php
+Redirect 301 /paint-protection-film/ https://www.mumsports.com/paint-protection-film.php
+Redirect 301 /photos/ https://www.mumsports.com/photos.php
+Redirect 301 /videos/ https://www.mumsports.com/videos.php
